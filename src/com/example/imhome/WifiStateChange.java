@@ -44,18 +44,22 @@ public class WifiStateChange extends BroadcastReceiver {
 	
 		   	        	long time = getTime(pref);
 		   	        	
-		   	        	System.out.println("Threshold: " + time);
+		   	        	/*System.out.println("Threshold: " + time);
 		   	        	System.out.println("Start Time: " + startTime);
 		   	        	System.out.println("Current Time: " + current);
-		   	        	System.out.println("Time when can send: " + (time + startTime));
+		   	        	System.out.println("Time when can send: " + (time + startTime));*/
+		   	        	
 		   	        	if ((startTime + time) < current) {
 				        	if (ssid.equals(prefssid) && state) {
 				        		AsyncTask<Object, Object, Object> send = new MagicPacket(ip, mac, port).execute();
 				        	} 
 		   	        	}
+		   	        	else {
+		   	        		System.out.println("Reconnect too early, not sending packets");
+		   	        	}
 	        	    }
 	        	         
-	        	    else {
+	        	    else if (NetworkInfo.State.DISCONNECTED.equals(nwInfo.getState())) {
 	        	    	SharedPreferences pref = context.getSharedPreferences("setup", Context.MODE_PRIVATE);
 	        	    	String lastSSID = pref.getString("currentSSID", "");
 	        	    	String prefSSID = pref.getString("ssid", "");
@@ -86,7 +90,7 @@ public class WifiStateChange extends BroadcastReceiver {
        		sec = 30;
        	}
        	
-       	long milli = (mins * 60000000000L) + (sec * 1000000000);
+       	long milli = (mins * 60000000000L) + (sec * 1000000000L);
 		return milli;
 	}
 
