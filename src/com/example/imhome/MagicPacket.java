@@ -49,7 +49,6 @@ public class MagicPacket extends AsyncTask<Object, Object, Object> {
         
         }
 
-        
 		return null;
 	}
 	

@@ -3,10 +3,12 @@ package com.example.imhome;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.view.Menu;
@@ -32,10 +34,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile);
-
-		Intent service = new Intent(getApplicationContext(), ImHomeService.class);
-		getApplicationContext().startService(service);
-		
+		        
 		ip = (EditText) findViewById(R.id.editText1);
 		mac = (EditText) findViewById(R.id.editText2);
 		port = (EditText) findViewById(R.id.editText3);

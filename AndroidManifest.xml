@@ -8,6 +8,10 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
 
+     <uses-permission android:name="android.permission.INTERNET"/>
+	 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+ 
     <application
         android:allowBackup="true"
         android:debuggable="true"
@@ -23,22 +27,15 @@
             </intent-filter>
             
         </activity>
-        <service
-  				android:name="ImHomeService"
-  				android:icon="@drawable/ic_launcher"
-  				android:label="I'm Home Service" /> 
-  				
-  			<receiver android:name=".BootReceiver" >
+          				
+			<receiver android:name="com.example.imhome.WifiStateChange" >
     			<intent-filter>
-      				  <action android:name="android.intent.action.BOOT_COMPLETED" />
-   				 </intent-filter>
+      				  <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+      				  <action android:name="android.net.wifi.STATE_CHANGE"/>
+      			</intent-filter>
 			</receiver>	
 			
     </application>
     
- <uses-permission android:name="android.permission.INTERNET"></uses-permission>
- <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
- <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
- <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
- 
+
 </manifest>
