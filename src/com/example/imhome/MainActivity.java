@@ -14,7 +14,9 @@ import android.content.SharedPreferences.Editor;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -29,9 +31,11 @@ public class MainActivity extends Activity {
 	TextView time;
 	SeekBar timeSlide;
 	ToggleButton state;
+	CheckBox startupBoot;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_NO_TITLE); 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile);
 		        
@@ -45,6 +49,7 @@ public class MainActivity extends Activity {
 		state = (ToggleButton) findViewById(R.id.toggleButton1);
 		time = (TextView) findViewById(R.id.textView8);
 		timeSlide = (SeekBar) findViewById(R.id.seekBar1);
+		startupBoot = (CheckBox) findViewById(R.id.checkBox1);
 		
 		loadPrefs();
 		send.setOnClickListener(new OnClickListener() {
@@ -155,6 +160,7 @@ public class MainActivity extends Activity {
 		state.setChecked(pref.getBoolean("state", true));
 		timeSlide.setProgress(pref.getInt("timeSlide", 0));
 		time.setText(pref.getString("time", "00:00 Min"));
+		startupBoot.setChecked(pref.getBoolean("startup", true));
 	}
 
 	private void savePrefs() {
@@ -167,6 +173,7 @@ public class MainActivity extends Activity {
 		editor.putString("ssid", ssid.getText().toString());
 		editor.putInt("timeSlide", timeSlide.getProgress());
 		editor.putString("time", time.getText().toString());
+		editor.putBoolean("startup", startupBoot.isChecked());
 		editor.commit();
 	}
 	

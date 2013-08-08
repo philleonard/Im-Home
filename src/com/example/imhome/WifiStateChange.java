@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 
 public class WifiStateChange extends BroadcastReceiver {
 
@@ -42,20 +43,37 @@ public class WifiStateChange extends BroadcastReceiver {
 			   	     long startTime = pref.getLong("counter", 0);
 			   	     long current = System.nanoTime();
 			   	     long time = getTime(pref);
-			   	        	
-			   	     if ((startTime + time) < current) {
-					      	if (ssid.equals(prefssid) && state) {
-					       		AsyncTask<Object, Object, Object> send = new MagicPacket(ip, mac, port).execute();
-					       	} 
+			   	     
+			   	     if (pref.getBoolean("startup", true)) {
+			   	    	 System.out.println(SystemClock.elapsedRealtime());
+			   	    	 if (SystemClock.elapsedRealtime() > 60000) {
+					   	     if ((startTime + time) < current) {
+							      	if (ssid.equals(prefssid) && state) {
+							       		AsyncTask<Object, Object, Object> send = new MagicPacket(ip, mac, port).execute();
+							       	} 
+					   	     }
+					   	     else {
+					   	      		System.out.println("Reconnect too early, not sending packets");
+					   	     }
+			   	    	 }
+			   	    	 else
+			   	    		System.out.println("Just booted, not sending packets");
 			   	     }
 			   	     else {
-			   	      		System.out.println("Reconnect too early, not sending packets");
+				   	    if ((startTime + time) < current) {
+						   	if (ssid.equals(prefssid) && state) {
+						   		AsyncTask<Object, Object, Object> send = new MagicPacket(ip, mac, port).execute();
+						   	} 
+				   	     }
+				   	     else {
+				   	      		System.out.println("Reconnect too early, not sending packets");
+				   	     }
 			   	     }
 		    	}
 		}
 		else if(intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
 		    NetworkInfo networkInfo = intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
-		    if(networkInfo.getType() == ConnectivityManager.TYPE_WIFI && ! networkInfo.isConnected()) {
+		    if(networkInfo.getType() == ConnectivityManager.TYPE_WIFI && !networkInfo.isConnected()) {
 		    	String lastSSID = pref.getString("currentSSID", "");
 	        	 String prefSSID = pref.getString("ssid", "");
 	        	   	

@@ -122,7 +122,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignRight="@+id/textView2"
-                android:layout_below="@+id/editText4"
+                android:layout_below="@+id/checkBox1"
                 android:text="Save" />
 
             <Button
@@ -132,7 +132,7 @@
                 android:layout_alignLeft="@+id/editText4"
                 android:layout_alignParentBottom="true"
                 android:layout_toLeftOf="@+id/button2"
-                android:layout_below="@+id/seekBar1"
+                android:layout_below="@+id/checkBox1"
                 android:text="Send Test" />
 
             <Button
@@ -141,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/seekBar1"
+                android:layout_below="@+id/checkBox1"
                 android:text="Cancel" />
 
             <TextView
@@ -152,15 +152,15 @@
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/editText4"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="\nTime before waking PC after first disconnect" />
+                android:text="\nOn connect, time before waking PC after last disconnect" />
 
             <SeekBar
                 android:id="@+id/seekBar1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_below="@+id/textView1"
                 android:layout_toLeftOf="@+id/textView8"
+                android:layout_toRightOf="@+id/textView9"
                 android:max="50" />
 
             <TextView
@@ -173,6 +173,24 @@
                 android:gravity="right|center_vertical"
                 android:text="00:00 Min"
                 android:textSize="@dimen/activity_horizontal_margin" />
+
+            <CheckBox
+                android:id="@+id/checkBox1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/seekBar1"
+                android:checked="true"
+                android:text="Don&apos;t wake PC after phone start (1 min)" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/textView8"
+                android:layout_alignBottom="@+id/textView8"
+                android:layout_alignParentLeft="true"
+                android:text="Time " />
 
         </RelativeLayout>
 
