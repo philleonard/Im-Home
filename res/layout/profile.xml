@@ -179,9 +179,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
                 android:layout_below="@+id/seekBar1"
                 android:checked="true"
-                android:text="Don&apos;t wake PC after phone start (1 min)" />
+                android:gravity="top|center|center_vertical"
+                android:text="Don&apos;t wake PC after phone start.\n(doesn&apos;t work with fastboot on rooted phones)"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/textView9"
