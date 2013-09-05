@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.imhome"
+    package="com.westcoastlabs.imhome"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -14,12 +14,11 @@
  
     <application
         android:allowBackup="true"
-        android:debuggable="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.imhome.MainActivity"
+            android:name="com.westcoastlabs.imhome.MainActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden" >
         	<intent-filter>
@@ -29,7 +28,7 @@
             
         </activity>
           				
-			<receiver android:name="com.example.imhome.WifiStateChange" >
+			<receiver android:name="com.westcoastlabs.imhome.WifiStateChange" >
     			<intent-filter>
       				  <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
       				  <action android:name="android.net.wifi.STATE_CHANGE"/>

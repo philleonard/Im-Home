@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="#e2f4fb" >
 
     <LinearLayout
         android:id="@+id/contain"
@@ -69,15 +70,6 @@
                 android:hint="00-00-00-00-00-00" />
 
             <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/editText1"
-                android:layout_alignBottom="@+id/editText1"
-                android:layout_alignParentLeft="true"
-                android:text="Broadcast IP" />
-
-            <TextView
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -89,9 +81,9 @@
                 android:id="@+id/toggleButton1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/imageButton1"
                 android:text="ToggleButton"
                 android:textOff="Disabled"
                 android:textOn="Enabled" />
@@ -114,35 +106,6 @@
                 android:layout_alignBottom="@+id/editText4"
                 android:layout_alignParentLeft="true"
                 android:text="SSID" />
-
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignRight="@+id/textView2"
-                android:layout_below="@+id/checkBox1"
-                android:text="Save" />
-
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/editText4"
-                android:layout_alignParentBottom="true"
-                android:layout_toLeftOf="@+id/button2"
-                android:layout_below="@+id/checkBox1"
-                android:text="Send Test" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/checkBox1"
-                android:text="Cancel" />
 
             <TextView
                 android:id="@+id/textView1"
@@ -182,7 +145,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/seekBar1"
                 android:checked="true"
-                android:gravity="top|center|center_vertical"
                 android:text="Don&apos;t wake PC after phone start.\n(doesn&apos;t work with fastboot on rooted phones)"
                 android:textSize="13sp" />
 
@@ -194,6 +156,66 @@
                 android:layout_alignBottom="@+id/textView8"
                 android:layout_alignParentLeft="true"
                 android:text="Time " />
+
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/checkBox2" >
+
+                <Button
+                    android:id="@+id/button1"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:text="Save" />
+
+                <Button
+                    android:id="@+id/button3"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:text="Send Test" />
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:text="Cancel" />
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/checkBox2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/checkBox1"
+                android:checked="true"
+                android:text="Enable Notifications" />
+
+            <ImageButton
+                android:id="@+id/imageButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/toggleButton1"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignRight="@+id/textView9"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/help" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/textView5"
+                android:layout_alignParentLeft="true"
+                android:text="PC IP or \nBroadcast IP" />
 
         </RelativeLayout>
 

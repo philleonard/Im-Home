@@ -15,7 +15,8 @@
     <!-- Application theme. -->
   
     <style name="AppTheme" parent="AppBaseTheme">
-      	<item name="android:windowNoTitle">true</item>
+      	<item name="android:windowNoTitle">false</item>
+      	<item name="android:windowBackground">@color/lblue</item>
     </style>
 
 </resources>
