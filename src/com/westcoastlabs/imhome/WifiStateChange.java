@@ -1,5 +1,7 @@
 package com.westcoastlabs.imhome;
 
+import java.util.Calendar;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,55 +25,23 @@ public class WifiStateChange extends BroadcastReceiver {
 		if(intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
 			NetworkInfo networkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
 		    	if(networkInfo.isConnected()) {
-		    		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-			       	 WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-			   	        	 
-			      	 String ssid = wifiInfo.getSSID();
-			      	 System.out.println("SSID: " + ssid);  	 
-			   	        
-			      	 String ip = pref.getString("ip", "");
-			   	     String mac = pref.getString("mac", "");
-			   	     int port = pref.getInt("port", 9);
-			   	     String prefssid = pref.getString("ssid", "");
-			   	     	
-			   	     Editor editor = pref.edit();
-			   	     editor.putString("currentSSID", ssid);
-			   	     editor.commit();
-			   	        	
-			   	     boolean state = pref.getBoolean("state", false);
-			   	  
-			   	     long startTime = pref.getLong("counter", 0);
-			   	     long current = System.nanoTime();
-			   	     long time = getTime(pref);
-			   	     
-			   	     if (pref.getBoolean("startup", true)) {
-			   	    	 System.out.println(SystemClock.elapsedRealtime());
-			   	    	 if (SystemClock.elapsedRealtime() > 60000) {
-					   	     if ((startTime + time) < current) {
-							      	if (ssid.equals(prefssid) && state) {
-							       		AsyncTask<Object, Object, Object> send = new MagicPacket(ip, mac, port).execute();
-							       		if (pref.getBoolean("notifications", true)) {
-							       			Notify not = new Notify(context, mac);
-							       		}
-							       	} 
-					   	     }
-					   	     else {
-					   	      		System.out.println("Reconnect too early, not sending packets");
-					   	     }
+		    	
+			   	     if(pref.getBoolean("disableFrom", false)) {
+			   	    	 int from = pref.getInt("fromTimePos", 0);
+			   	    	 int to = pref.getInt("toTimePos", 0);
+			   	    	 Calendar c = Calendar.getInstance(); 
+			   	    	 int hour = c.get(Calendar.HOUR_OF_DAY);
+			   	    	 
+			   	    	 if ((hour <= from && hour >= to) || ((hour > from && hour >= to) && !(from > to)) || ((hour < from && hour < to) && !(from > to)) && from != to) {
+			   	    		 sendPacket(context, pref);
 			   	    	 }
-			   	    	 else
-			   	    		System.out.println("Just booted, not sending packets");
+			   	    	 else {
+			   	    		 System.out.println("Currently in the disabled time frame, not sending packets");
+			   	    	 }
 			   	     }
-			   	     else {
-				   	    if ((startTime + time) < current) {
-						   	if (ssid.equals(prefssid) && state) {
-						   		AsyncTask<Object, Object, Object> send = new MagicPacket(ip, mac, port).execute();
-						   	} 
-				   	     }
-				   	     else {
-				   	      		System.out.println("Reconnect too early, not sending packets");
-				   	     }
-			   	     }
+			   	     else 
+			   	    	 sendPacket(context, pref);
+			   	     
 		    	}
 		}
 		else if(intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
@@ -93,7 +63,58 @@ public class WifiStateChange extends BroadcastReceiver {
 		
 	}
 
-	  private long getTime(SharedPreferences pref) {
+	  private void sendPacket(Context context, SharedPreferences pref) {
+		  
+		  WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+	       	 WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+		  	String ssid = wifiInfo.getSSID();
+	      	 System.out.println("SSID: " + ssid);  	 
+	   	        
+	      	 String ip = pref.getString("ip", "");
+	   	     String mac = pref.getString("mac", "");
+	   	     int port = pref.getInt("port", 9);
+	   	     String prefssid = pref.getString("ssid", "");
+	   	     	
+	   	     Editor editor = pref.edit();
+	   	     editor.putString("currentSSID", ssid);
+	   	     editor.commit();
+	   	        	
+	   	     boolean state = pref.getBoolean("state", false);
+	   	  
+	   	     long startTime = pref.getLong("counter", 0);
+	   	     long current = System.nanoTime();
+	   	     long time = getTime(pref);
+		  if (pref.getBoolean("startup", true)) {   	 
+	   	    	 if (SystemClock.elapsedRealtime() > 60000) {
+			   	     if ((startTime + time) < current) {
+					      	if (ssid.equals(prefssid) && state) {
+					       		AsyncTask<Object, Object, Object> send = new MagicPacket(ip, mac, port).execute();
+					       		if (pref.getBoolean("notifications", true)) {
+					       			Notify not = new Notify(context, mac);
+					       		}
+					       	} 
+			   	     }
+			   	     else {
+			   	      		System.out.println("Reconnect too early, not sending packets");
+			   	     }
+	   	    	 }
+	   	    	 else
+	   	    		System.out.println("Just booted, not sending packets");
+	   	     }
+	   	     else {
+		   	    if ((startTime + time) < current) {
+				   	if (ssid.equals(prefssid) && state) {
+				   		AsyncTask<Object, Object, Object> send = new MagicPacket(ip, mac, port).execute();
+				   	} 
+		   	     }
+		   	     else {
+		   	      		System.out.println("Reconnect too early, not sending packets");
+		   	     }
+	   	     }
+		
+	}
+
+	private long getTime(SharedPreferences pref) {
 			int progress = pref.getInt("timeSlide", 0);
 	       	
 	        int mins;

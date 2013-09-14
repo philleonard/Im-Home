@@ -1,43 +1,59 @@
 package com.westcoastlabs.imhome;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.westcoastlabs.imhome.R;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
 
 	EditText ip, mac, port, ssid;
-	Button send, save, cancel; 
+	Button send, save, cancel, timeframe, currentSSID; 
 	ImageButton helpButton;
 	TextView time;
 	SeekBar timeSlide;
 	ToggleButton state;
-	CheckBox startupBoot, enableNotifications;
-	
+	CheckBox startupBoot, enableNotifications, disableFrom;
+	Spinner from, to;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//requestWindowFeature(Window.FEATURE_NO_TITLE); 
+		requestWindowFeature(Window.FEATURE_NO_TITLE); 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.profile);
 		        
@@ -54,8 +70,68 @@ public class MainActivity extends Activity {
 		startupBoot = (CheckBox) findViewById(R.id.checkBox1);
 		enableNotifications = (CheckBox) findViewById(R.id.checkBox2);
 		helpButton = (ImageButton) findViewById(R.id.imageButton1);
+		disableFrom = (CheckBox) findViewById(R.id.checkBox3);
+		from = (Spinner) findViewById(R.id.spinner1);
+		to = (Spinner) findViewById(R.id.spinner2);
+		currentSSID = (Button) findViewById(R.id.button4);
+		
+		// Create an ArrayAdapter using the string array and a default spinner layout
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+		R.array.time, android.R.layout.simple_spinner_item);
+		// Specify the layout to use when the list of choices appears
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// Apply the adapter to the spinner
+		from.setAdapter(adapter);
+		to.setAdapter(adapter);
+				
 		
 		loadPrefs();
+
+		if(!disableFrom.isChecked()) {
+			from.setEnabled(false);
+			to.setEnabled(false);
+		}
+		
+		currentSSID.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+				NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+				if (mWifi.isConnected()) {
+					String SSID = getCurrentSsid(getApplicationContext());
+					if (SSID != null) {
+						ssid.setText(SSID);
+					}
+					else {
+						Toast.makeText(getApplicationContext(), "Error: Can't get SSID!", Toast.LENGTH_SHORT).show();
+					}
+				}
+				
+				else {
+					Toast.makeText(getApplicationContext(), "Error: Can't get SSID! WiFi not connected", Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+		
+		disableFrom.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) {
+					from.setEnabled(true);
+					to.setEnabled(true);
+				}
+				else if (!isChecked) {
+					from.setEnabled(false);
+					to.setEnabled(false);
+				}
+				
+			}
+		});
+		
+		
 		send.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -177,6 +253,10 @@ public class MainActivity extends Activity {
 		time.setText(pref.getString("time", "00:00 Min"));
 		startupBoot.setChecked(pref.getBoolean("startup", true));
 		enableNotifications.setChecked(pref.getBoolean("notifications", true));
+		disableFrom.setChecked(pref.getBoolean("disableFrom", false));
+		List<String> time = Arrays.asList(getResources().getStringArray(R.array.time));
+		from.setSelection(pref.getInt("fromTimePos", 0));
+		to.setSelection(pref.getInt("toTimePos", 0));
 	}
 
 	private void savePrefs() {
@@ -191,6 +271,11 @@ public class MainActivity extends Activity {
 		editor.putString("time", time.getText().toString());
 		editor.putBoolean("startup", startupBoot.isChecked());
 		editor.putBoolean("notifications", enableNotifications.isChecked());
+		editor.putBoolean("disableFrom", disableFrom.isChecked());
+		editor.putString("fromTime", from.getSelectedItem().toString());
+		editor.putString("toTime", to.getSelectedItem().toString());
+		editor.putInt("fromTimePos", from.getSelectedItemPosition());
+		editor.putInt("toTimePos", to.getSelectedItemPosition());
 		editor.commit();
 	}
 	
@@ -244,5 +329,19 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	public static String getCurrentSsid(Context context) {
+		  String ssid = null;
+		  ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		  NetworkInfo networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		  if (networkInfo.isConnected()) {
+		    final WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		    final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
+		    if (connectionInfo != null && connectionInfo.getSSID() != null) {
+		      ssid = connectionInfo.getSSID();
+		    }
+		  }
+		  return ssid;
+		}
 
 }
