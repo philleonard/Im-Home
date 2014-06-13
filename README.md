@@ -59,4 +59,4 @@ In Mac or Linux type "ifconfig" and look for "HWaddr" under your eth device.
 
 * Note: On some machines Wake On Lan only works after a clean shutdown. If you turn the power off and on at the switch or at the PSU then the ethernet adapter might not be turned back on again until you start the computer manually.
 
-![alt text](http://1.bp.blogspot.com/-Pbm0K264DL0/UjL59v1OckI/AAAAAAAAJ5M/Wvq6o62zI1w/s1600/device-2013-09-12-174354.png "Screenshot")
+![alt text](http://1.bp.blogspot.com/-Pbm0K264DL0/UjL59v1OckI/AAAAAAAAJ5M/Wvq6o62zI1w/s1600/device-2013-09-12-174354.png)
