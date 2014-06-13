@@ -1,6 +1,6 @@
 Im-Home
 =======
-Play Store page: <https://play.google.com/store/apps/details?id=com.westcoastlabs.imhome>
+[Play Store page.](https://play.google.com/store/apps/details?id=com.westcoastlabs.imhome)
 
 WOL service for Android which sends magic packets upon WiFi connection. In effect, the app powers on your computer when you come home.
 
@@ -31,9 +31,8 @@ Alternately if you are someone who shuts their computer down when you leave your
 It works by using the Wake On Lan service built into almost all motherboards, and by sending magic packets to your computer when your android phone joins your WiFi network. Wake On Lan is only provided by ethernet adaptors so your PC will have to be connected to the router via ethernet. (This app will work on WiFi only to wake the PCs in sleep mode (i.e. when the WiFi card is still on)).
 
 ##Usage
-1. Simply configure your Windows PC/Mac/Linux machine using the tutorial in this link. 
-..* The most important part is to ensure that Wake On Lan is enabled in your BIOS (usually that's all that's needed).
-2. Download the application on the Play Store here or using the QR code above.
+1. Simply configure your Windows PC/Mac/Linux machine using the tutorial in this [link](http://lifehacker.com/348197/access-your-computer-anytime-and-save-energy-with-wake+on+lan). The most important part is to ensure that Wake On Lan is enabled in your BIOS (usually that's all that's needed).
+2. Download the application on the Play Store or cloning this repo and compiling (in eclipse, android studio etc..).
 3. Configure the application as follows;
 
 ###Parameters
